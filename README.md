@@ -1,5 +1,9 @@
 # rmc-mcp
 
+[![PyPI version](https://badge.fury.io/py/rmc-mcp.svg)](https://pypi.org/project/rmc-mcp/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Model Context Protocol (MCP) server that wraps prompts with **recursive meta-cognition instructions** for AI code assistants like Claude Code, Cursor, and GitHub Copilot.
 
 ## What is Recursive Meta-Cognition?
@@ -20,49 +24,39 @@ This approach produces more thoughtful, robust implementations by forcing the AI
 - **Cost-effective**: Uses DeepSeek API (significantly cheaper than OpenAI/Anthropic)
 - **Works with any AI assistant**: Output can be used with Claude, Cursor, Copilot, ChatGPT, etc.
 
-## Prerequisites
+## Quick Start
 
-- Python 3.10+
-- [uv](https://docs.astral.sh/uv/) package manager
-- [Claude Code](https://claude.ai/code) CLI
-- DeepSeek API key
+### 1. Get your DeepSeek API key
 
-## Installation
+1. Go to [DeepSeek Platform](https://platform.deepseek.com/api_keys)
+2. Create an account and generate an API key
 
-### 1. Clone the repository
+### 2. Install with Claude Code (one command!)
+
+```bash
+claude mcp add rmc-mcp -s user -e DEEPSEEK_API_KEY="your-api-key" -- uvx rmc-mcp
+```
+
+### 3. Restart Claude Code
+
+Exit and reopen Claude Code. The `wrap_prompt` tool is now available!
+
+That's it! No cloning, no manual dependency installation.
+
+---
+
+## Alternative Installation (from source)
+
+If you prefer to install from source:
 
 ```bash
 git clone https://github.com/gumruyanzh/rmc-mcp.git
 cd rmc-mcp
-```
-
-### 2. Install dependencies
-
-```bash
 uv sync
+claude mcp add rmc-mcp -s user -e DEEPSEEK_API_KEY="your-key" -- uv run --directory /path/to/rmc-mcp rmc-mcp
 ```
 
-### 3. Get your DeepSeek API key
-
-1. Go to [DeepSeek Platform](https://platform.deepseek.com/api_keys)
-2. Create an account (if you don't have one)
-3. Generate a new API key
-4. Copy the key for the next step
-
-### 4. Add to Claude Code
-
-```bash
-claude mcp add rmc-mcp \
-  -s user \
-  -e DEEPSEEK_API_KEY="your-api-key-here" \
-  -- uv run --directory /path/to/rmc-mcp rmc-mcp
-```
-
-Replace `/path/to/rmc-mcp` with the actual path where you cloned the repo.
-
-### 5. Restart Claude Code
-
-Exit and reopen Claude Code for the `wrap_prompt` tool to become available.
+---
 
 ## Usage
 
@@ -198,12 +192,12 @@ You can install the server at different scopes:
 
 **User scope** (recommended) - Available in all your projects:
 ```bash
-claude mcp add rmc-mcp -s user -e DEEPSEEK_API_KEY="..." -- uv run --directory /path/to/rmc-mcp rmc-mcp
+claude mcp add rmc-mcp -s user -e DEEPSEEK_API_KEY="..." -- uvx rmc-mcp
 ```
 
 **Project scope** - Available only in a specific project:
 ```bash
-claude mcp add rmc-mcp -s project -e DEEPSEEK_API_KEY="..." -- uv run --directory /path/to/rmc-mcp rmc-mcp
+claude mcp add rmc-mcp -s project -e DEEPSEEK_API_KEY="..." -- uvx rmc-mcp
 ```
 
 ## Troubleshooting
@@ -213,26 +207,25 @@ claude mcp add rmc-mcp -s project -e DEEPSEEK_API_KEY="..." -- uv run --director
 Make sure you included the `-e DEEPSEEK_API_KEY="your-key"` flag when adding the MCP server:
 
 ```bash
-claude mcp add rmc-mcp -s user -e DEEPSEEK_API_KEY="your-key" -- uv run --directory /path/to/rmc-mcp rmc-mcp
+claude mcp add rmc-mcp -s user -e DEEPSEEK_API_KEY="your-key" -- uvx rmc-mcp
 ```
 
 ### Tool not appearing in Claude Code
 
-1. Make sure you ran `uv sync` in the project directory
-2. Restart Claude Code completely (exit and reopen)
-3. Check the MCP server is registered: `claude mcp list`
+1. Restart Claude Code completely (exit and reopen)
+2. Check the MCP server is registered: `claude mcp list`
 
 ### Testing the server manually
 
 ```bash
 # Should start and wait for stdio input (Ctrl+C to exit)
-DEEPSEEK_API_KEY="your-key" uv run rmc-mcp
+DEEPSEEK_API_KEY="your-key" uvx rmc-mcp
 ```
 
 ### Testing with MCP Inspector
 
 ```bash
-npx @anthropic-ai/mcp-inspector uv run --directory /path/to/rmc-mcp rmc-mcp
+npx @anthropic-ai/mcp-inspector uvx rmc-mcp
 ```
 
 ## Why DeepSeek?
